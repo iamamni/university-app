@@ -1,32 +1,73 @@
 import "./App.css";
-import me from "./assets/me.png";
+import Header from "./components/Header.jsx";
+import Navbar from "./components/Navbar.jsx";
+import StudentCard from "./components/StudentCard.jsx";
+import Footer from "./components/Footer.jsx";
 
-const w = "Amani Awainia " ;
-const y = "amaniawainia@gmail.com" ;
-const z = "+216 25470273" ;
-const x = "Génie Logiciel et Systèmes d'Information" ;
-const v = "2ème année" ;
-const u = "GLSI 2" ;
-const t = "Mahdia" ;
+import me from "./assets/me.png";
+import lala from "./assets/lala.png";
+
+const etudiants = [
+  {
+    prenom: "Amani",
+    nom: "Awainia",
+    email: "amaniawainia@gmail.com",
+    telephone: "+216 25 470 273",
+    filiere: "Génie Logiciel et Systèmes d'Information",
+    anneeEtude: "2ème année",
+    groupe: "GLSI 2",
+    ville: "Mahdia",
+    image: me,
+  },
+  {
+    prenom: "Sarra",
+    nom: "Trabelsi",
+    email: "sarra.trabelsi@gmail.com",
+    telephone: "+216 22 345 678",
+    filiere: "Génie Logiciel et Systèmes d'Information",
+    anneeEtude: "2ème année",
+    groupe: "GLSI 1",
+    ville: "Sousse",
+    image: lala,
+  },
+  {
+    prenom: "Mariem",
+    nom: "Khalfallah",
+    email: "mariem.khalfallah@gmail.com",
+    telephone: "+216 27 567 890",
+    filiere: "Génie Logiciel et Systèmes d'Information",
+    anneeEtude: "2ème année",
+    groupe: "GLSI 2",
+    
+  },
+];
 
 function App() {
-
   return (
-    <div className="App">
-      <img src={me} alt="Photo de l'étudiant" />
-      <h1 className="title">Fiche étudiant</h1>
-      <p> <strong>Nom & Prénom :</strong> {w}</p>
-      <p> <strong>Email :</strong> {y}</p>
-      <p> <strong>Téléphone :</strong> {z}</p>
-      <p> <strong>Fillière :</strong> {x}</p>
-      <p> <strong>Année d'étude :</strong> {v}</p>
-      <p> <strong>Groupe :</strong> {u}</p>
-      <p> <strong>Ville :</strong> {t}</p>
-      <a className="contact-btn" href="mailto:amaniawainia@gmail.com">contacter</a>
+    <div className="app">
+      <Header />
+      <Navbar />
 
+      <main className="container">
+        {etudiants.map((etudiant) => (
+          <StudentCard
+            key={etudiant.email}
+            prenom={etudiant.prenom}
+            nom={etudiant.nom}
+            email={etudiant.email}
+            telephone={etudiant.telephone}
+            filiere={etudiant.filiere}
+            anneeEtude={etudiant.anneeEtude}
+            groupe={etudiant.groupe}
+            ville={etudiant.ville}
+            image={etudiant.image}
+          />
+        ))}
+      </main>
+
+      <Footer />
     </div>
   );
 }
 
 export default App;
-
