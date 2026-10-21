@@ -20,9 +20,9 @@ const etudiants = [
     image: me,
   },
   {
-    prenom: "Sarra",
+    prenom: "Aziz",
     nom: "Trabelsi",
-    email: "sarra.trabelsi@gmail.com",
+    email: "aziz.trabelsi@gmail.com",
     telephone: "+216 22 345 678",
     filiere: "Génie Logiciel et Systèmes d'Information",
     anneeEtude: "2ème année",
