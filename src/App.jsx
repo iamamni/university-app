@@ -16,7 +16,7 @@ const etudiants = [
     filiere: "Génie Logiciel et Systèmes d'Information",
     anneeEtude: "2ème année",
     groupe: "GLSI 2",
-    ville: "Mahdia",
+    ville: "Medenine",
     image: me,
   },
   {
