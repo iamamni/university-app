@@ -1,5 +1,5 @@
 .navbar {
-  background: #441f66;
+  background: var(--violet);
   display: flex;
   justify-content: center;
   gap: 30px;
@@ -7,7 +7,7 @@
 }
 
 .navbar a {
-  color: #dfe3ff;
+  color: #ede4ff;
   text-decoration: none;
   font-weight: 500;
 }
