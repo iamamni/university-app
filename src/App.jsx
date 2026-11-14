@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import Header from "./components/Header.jsx";
 import Navbar from "./components/Navbar.jsx";
+import StudentForm from "./components/StudentForm.jsx";
 import StudentCard from "./components/StudentCard.jsx";
 import Footer from "./components/Footer.jsx";
 
@@ -9,7 +10,6 @@ import me from "./assets/me.png";
 import lala from "./assets/lala.png";
 
 function App() {
-  // 1. La liste des étudiants est maintenant un ÉTAT
   const [etudiants, setEtudiants] = useState([
     {
       id: 1,
@@ -17,7 +17,7 @@ function App() {
       nom: "Awainia",
       email: "amaniawainia@gmail.com",
       telephone: "+216 25 470 273",
-      filiere: "Génie Logiciel et Systèmes d'Information",
+      filiere: "GLSI",
       anneeEtude: "2ème année",
       groupe: "GLSI 2",
       ville: "Mahdia",
@@ -29,7 +29,7 @@ function App() {
       nom: "Trabelsi",
       email: "sarra.trabelsi@gmail.com",
       telephone: "+216 22 345 678",
-      filiere: "Licence Computer Science",
+      filiere: "LCS",
       anneeEtude: "1ère année",
       groupe: "LCS 1",
       image: lala,
@@ -40,49 +40,49 @@ function App() {
       nom: "Khalfallah",
       email: "mariem.khalfallah@gmail.com",
       telephone: "+216 27 567 890",
-      filiere: "Licence Business Computing",
+      filiere: "LBC",
       anneeEtude: "2ème année",
       groupe: "LBC 2",
     },
   ]);
 
-  // 2. Le texte tapé dans la barre de filtre est aussi un état
   const [filtre, setFiltre] = useState("");
 
-  // AJOUTER : on crée un NOUVEAU tableau (anciens étudiants + le nouveau)
-  function ajouterEtudiant() {
-    const nouvelEtudiant = {
-      id: Date.now(), // identifiant unique
-      prenom: "Yassine",
-      nom: "Ben Salem",
-      email: "yassine.bensalem@gmail.com",
-      telephone: "+216 44 444 444",
-      filiere: "Génie Logiciel et Systèmes d'Information",
-      anneeEtude: "2ème année",
-      groupe: "GLSI 1",
-      ville: "Sfax",
-    };
-    setEtudiants([...etudiants, nouvelEtudiant]);
+  // null = mode ajout, sinon = l'étudiant qu'on est en train de modifier
+  const [etudiantAModifier, setEtudiantAModifier] = useState(null);
+
+  // AJOUTER : reçoit les données du formulaire et ajoute un id
+  function ajouterEtudiant(nouvelEtudiant) {
+    const etudiantAvecId = { ...nouvelEtudiant, id: Date.now() };
+    setEtudiants((anciensEtudiants) => [...anciensEtudiants, etudiantAvecId]);
   }
 
-  // SUPPRIMER : on garde tous les étudiants SAUF celui qui a cet id
+  // SUPPRIMER
   function supprimerEtudiant(id) {
     setEtudiants(etudiants.filter((etudiant) => etudiant.id !== id));
+    if (etudiantAModifier?.id === id) {
+      setEtudiantAModifier(null); // on supprimait celui qu'on modifiait
+    }
   }
 
-  // MODIFIER : on remplace seulement l'étudiant concerné par une copie modifiée
-  function modifierPrenom(id) {
-    const nouveauPrenom = prompt("Nouveau prénom :");
-    if (!nouveauPrenom) return; // annulé ou vide : on ne change rien
+  // MODIFIER (étape 1) : clic sur "Modifier" dans une carte
+  function modifierEtudiant(etudiant) {
+    setEtudiantAModifier(etudiant);
+    window.scrollTo({ top: 0, behavior: "smooth" }); // remonter vers le formulaire
+  }
 
-    setEtudiants(
-      etudiants.map((etudiant) =>
-        etudiant.id === id ? { ...etudiant, prenom: nouveauPrenom } : etudiant
+  // MODIFIER (étape 2) : le formulaire renvoie l'étudiant modifié
+  function enregistrerModification(etudiantModifie) {
+    setEtudiants((anciensEtudiants) =>
+      anciensEtudiants.map((etudiant) =>
+        etudiant.id === etudiantAModifier.id
+          ? { ...etudiantModifie, id: etudiant.id } // on garde le même id
+          : etudiant
       )
     );
+    setEtudiantAModifier(null); // retour au mode ajout
   }
 
-  // FILTRER : on calcule la liste à afficher à partir de l'état
   const etudiantsFiltres = etudiants.filter((etudiant) =>
     etudiant.filiere.toLowerCase().includes(filtre.toLowerCase())
   );
@@ -92,6 +92,14 @@ function App() {
       <Header />
       <Navbar />
 
+      <StudentForm
+        key={etudiantAModifier ? etudiantAModifier.id : "nouveau"}
+        onAjouterEtudiant={ajouterEtudiant}
+        etudiantAModifier={etudiantAModifier}
+        onModifierEtudiant={enregistrerModification}
+        onAnnuler={() => setEtudiantAModifier(null)}
+      />
+
       <div className="actions">
         <input
           type="text"
@@ -100,7 +108,6 @@ function App() {
           value={filtre}
           onChange={(e) => setFiltre(e.target.value)}
         />
-        <button onClick={ajouterEtudiant}>+ Ajouter un étudiant</button>
       </div>
 
       <main className="container">
@@ -121,7 +128,7 @@ function App() {
             ville={etudiant.ville}
             image={etudiant.image}
             onSupprimer={() => supprimerEtudiant(etudiant.id)}
-            onModifier={() => modifierPrenom(etudiant.id)}
+            onModifier={() => modifierEtudiant(etudiant)}
           />
         ))}
       </main>
